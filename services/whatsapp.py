@@ -12,7 +12,7 @@ class WhatsAppService:
     def __init__(self):
         self.whatsapp_token = os.environ.get("WHATSAPP_TOKEN")
         self.whatsapp_url = os.environ.get("WHATSAPP_URL")
-        self.sqlchatbot_endpoint = os.environ.get("SQLCHATBOT_ENDPOINT")
+        self.sqlchatbot_endpoint = os.environ.get("AI_ENDPOINT")
 
     async def get_wpp_message(self, message: dict) -> str:
         if 'type' not in message :
