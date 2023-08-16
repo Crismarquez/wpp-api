@@ -3,6 +3,7 @@ import time
 import json
 from typing import Tuple, Union
 import asyncio
+import requests
 
 import httpx
 
@@ -14,7 +15,7 @@ class WhatsAppService:
         self.whatsapp_url = os.environ.get("WHATSAPP_URL")
         self.sqlchatbot_endpoint = os.environ.get("AI_ENDPOINT")
 
-    async def get_wpp_message(self, message: dict) -> str:
+    def get_wpp_message(self, message: dict) -> str:
         if 'type' not in message :
             text = 'mensaje no reconocido'
             return text
@@ -33,27 +34,27 @@ class WhatsAppService:
         
         return text
 
-    async def send_wpp_message(self, data: str) -> Tuple[str, int]:
+    def send_wpp_message(self, data: str) -> Tuple[str, int]:
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {self.whatsapp_token}'
         }
-        async with httpx.AsyncClient() as client:
-            response = await client.post(self.whatsapp_url, headers=headers, data=data)
-        
+        response = requests.post(self.whatsapp_url, 
+                                        headers=headers, 
+                                        data=data)
         if response.status_code == 200:
             return 'mensaje enviado', 200
         else:
             return 'error al enviar mensaje', response.status_code
 
-    async def chatbot_action(self, text: str, number: str, messageId: str, name: str):
+    def chatbot_action(self, text: str, number: str, messageId: str, name: str):
         text = text.lower() #mensaje que envio el usuario
         list = []
         print("mensaje del usuario: ",text)
 
         markRead = self.mark_read_message(messageId)
         list.append(markRead)
-        await asyncio.sleep(2)
+        time.sleep(2)
 
         conversation_payload = {
             "celphone": number,
@@ -63,10 +64,8 @@ class WhatsAppService:
             ]
         }
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            logger.info("Sending message to SQLChatbot")
-            response = await client.post(self.sqlchatbot_endpoint, json=conversation_payload)
-            logger.info(f"SQLChatbot response: {response.status_code}")
+        response = requests.post(self.sqlchatbot_endpoint, json=conversation_payload)
+        logger.info(f"SQLChatbot response: {response.status_code}")
             
         # Asegúrate de manejar posibles errores en la respuesta.
         if response.status_code == 200:
@@ -82,7 +81,7 @@ class WhatsAppService:
         list.append(data)
 
         for item in list:
-            await self.send_wpp_message(item)
+            self.send_wpp_message(item)
 
     def text_message(self, number: str, text: str) -> str:
         data = json.dumps(

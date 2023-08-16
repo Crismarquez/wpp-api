@@ -21,6 +21,11 @@ ENV_VARIABLES = {
     **os.environ,  # override loaded values with environment variables
 }
 
+users_allowed = {
+    "573127423350": "Cristian",
+    "573147731722": "Edward",
+}
+
 stickers = {
     "poyo_feliz": 984778742532668,
     "perro_traje": 1009219236749949,
