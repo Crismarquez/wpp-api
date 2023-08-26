@@ -26,6 +26,27 @@ users_allowed = {
     "573147731722": "Edward",
 }
 
+media_types = {
+    'audio/aac': 'aac',
+    'audio/mp4': 'mp4',
+    'audio/mpeg': 'mp3',
+    'audio/amr': 'amr',
+    'audio/ogg': 'ogg',
+    'text/plain': 'txt',
+    'application/pdf': 'pdf',
+    'application/vnd.ms-powerpoint': 'ppt',
+    'application/msword': 'doc',
+    'application/vnd.ms-excel': 'xls',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+    'image/jpeg': 'jpeg',
+    'image/png': 'png',
+    'video/mp4': 'mp4',
+    'video/3gp': '3gp',
+    'image/webp': 'webp',
+}
+
 stickers = {
     "poyo_feliz": 984778742532668,
     "perro_traje": 1009219236749949,

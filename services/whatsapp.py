@@ -7,6 +7,8 @@ import requests
 
 import httpx
 
+from services.speechtext import WhisperClass
+from services.utils import manage_download, convertir_ogg_a_mp3
 from config.config import stickers, logger
 
 class WhatsAppService:
@@ -15,11 +17,12 @@ class WhatsAppService:
         self.whatsapp_url = os.environ.get("WHATSAPP_URL")
         self.sqlchatbot_endpoint = os.environ.get("AI_ENDPOINT")
 
+        self.transcriber = WhisperClass("whisper-1")
+
     def get_wpp_message(self, message: dict) -> str:
         if 'type' not in message :
             text = 'mensaje no reconocido'
             return text
-
         typeMessage = message['type']
         if typeMessage == 'text':
             text = message['text']['body']
@@ -29,6 +32,23 @@ class WhatsAppService:
             text = message['interactive']['list_reply']['title']
         elif typeMessage == 'interactive' and message['interactive']['type'] == 'button_reply':
             text = message['interactive']['button_reply']['title']
+        elif typeMessage== 'audio':
+            logger.info("audio message")
+            logger.info(message)
+            download_path = manage_download(message['audio']['id'], message['from'], "audio")
+            if isinstance(download_path, tuple):
+                logger.info("no se pudo descargar el audio")
+                text = f"Informa al usuario que no se pudo descargar el audio, el error interno es : {download_path[1]}"
+            # else:
+            #     text = f"Informa al usuario que el id del audio es: {message['audio']['id']}"
+            else:
+                if download_path.exists():
+                    audio_file = open(str(download_path), "rb")
+                    text = self.transcriber.transcribe(audio_file)
+                    if text == "":
+                        text = f"Informa al usuario que no se pudo transcribir el audio id: {message['audio']['id']}"
+                else:
+                    text = f"Informa al usuario que no se pudo transcribir el audio en la ruta {download_path}"
         else:
             text = 'mensaje no procesado'
         
