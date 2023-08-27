@@ -1,8 +1,9 @@
-## **Project Name:** 
 ### Integrated Intelligent Responses System via WhatsApp
 
 ## **General Description:** 
-This project is designed to provide high-quality automated responses to users through WhatsApp, leveraging Artificial Intelligence. It consists of a modular architecture that integrates FastAPI as the main server, the WhatsApp API for messaging interaction, and connects to another backend that utilizes LLMs (Language Models) for AI-driven responses.
+This project is designed to provide high-quality automated responses to users through WhatsApp, leveraging Artificial Intelligence. It consists of a modular architecture that integrates FastAPI as the main server, the WhatsApp API for messaging interaction, and connects to another backend that use ChatGPT for AI-driven responses.
+
+For process audio, this project use Wisper from OpenAI
 
 ## **Main Components:**
 
@@ -20,6 +21,8 @@ This project is designed to provide high-quality automated responses to users th
    * This is an independent system that uses Language Models (LLMs) to generate contextually relevant responses based on user queries.
    * FastAPI sends user queries to this backend and awaits a response.
    * Once the response is generated, it's sent back to FastAPI for further dispatching via WhatsApp.
+
+   You should configure the LLM endpoint in .venv file AI_ENDPOINT
 
 ## **Workflow:**
 
